@@ -1,0 +1,55 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #ffe2f2;
+  }
+  
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .paper {
+    background-color: #ffc7e7;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 400px;
+  }
+  
+  .typography {
+    color: #333;
+    text-align: center;
+    margin-bottom: 16px;
+    
+  }
+  
+  .speed-select {
+    display: block; /* This makes the speed select appear on a new line */
+    margin: 20px;   
+  }
+  
+  .button {
+    margin-top: 16px;
+    background-color: #9a5e8e;
+    color: #fff;
+  }
+  
+  .button:hover {
+    background-color: #42283d;
+  }
+  
+  .result {
+    font-weight: bold;
+    margin-top: 20px;
+    color: #9a5e8e;
+  }
+  
+  h2 {
+    color: #9a5e8e;
+  }
+  
