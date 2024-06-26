@@ -2,7 +2,7 @@
 
 A web application to calculate the percentage of an audiobook you have listened to, along with the estimated time remaining based on your listening speed.
 
-![Book Percentage Calculator](audiobook-project/AudioCalcImage.png)
+<img src="audiobook-project/AudioCalcImage.png" alt="Book Percentage Calculator" width="400">
 
 ## Features
 - Calculate the percentage of an audiobook you've listened to.
