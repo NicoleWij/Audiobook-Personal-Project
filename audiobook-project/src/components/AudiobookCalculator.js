@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AudiobookPresenter } from '../presenters/AudiobookPresenter';
 import { Button, Typography, Container, MenuItem, Select, FormControl, InputLabel, Grid, Paper } from '@mui/material';
 import '../styles/AudiobookCalculator.css';
@@ -8,12 +8,21 @@ const AudiobookCalculator = () => {
     const [totalMinutes, setTotalMinutes] = useState('');
     const [hoursListened, setHoursListened] = useState('');
     const [minutesListened, setMinutesListened] = useState('');
-    const [listeningSpeed, setListeningSpeed] = useState(1);
+    const [listeningSpeed, setListeningSpeed] = useState('');
     const [result, setResult] = useState(null);
 
     const presenter = new AudiobookPresenter({
         displayResult: (result) => setResult(result),
+        setTotalHours,
+        setTotalMinutes,
+        setHoursListened,
+        setMinutesListened,
+        setListeningSpeed,
     });
+
+    useEffect(() => {
+        presenter.retrieveData();
+    }, []);
 
     const createDropdownOptions = (range) => {
         return Array.from(Array(range + 1).keys()).map((value) => (
@@ -23,32 +32,48 @@ const AudiobookCalculator = () => {
         ));
     };
 
+    const createListeningSpeedOptions = () => {
+        const speeds = [
+            { value: 1, label: '1.0x (Normal Speed)' },
+            { value: 1.1, label: '1.1x' },
+            { value: 1.2, label: '1.2x' },
+            { value: 1.3, label: '1.3x' },
+            { value: 1.4, label: '1.4x' },
+            { value: 1.5, label: '1.5x' },
+            { value: 1.6, label: '1.6x' },
+            { value: 1.7, label: '1.7x' },
+            { value: 1.8, label: '1.8x' },
+            { value: 1.9, label: '1.9x' },
+            { value: 2, label: '2.0x (Double Speed)' }
+        ];
+
+        return speeds.map((speed) => (
+            <MenuItem key={speed.value} value={speed.value}>
+                {speed.label}
+            </MenuItem>
+        ));
+    };
+
     return (
         <Container maxWidth="sm" className="container">
             <Paper elevation={3} className="paper">
-                <Typography variant="h5" className="typography">
+                <Typography variant="h5" className="title">
                     Book Percentage Calculator
                 </Typography>
 
                 <Grid container spacing={2}>
                     <Grid item xs={6}>
-                        <FormControl fullWidth margin="normal"
-                            size="small">
+                        <FormControl fullWidth margin="normal" size="small">
                             <InputLabel>Total Hours</InputLabel>
-                            <Select value={totalHours}
-                                onChange={(e) => setTotalHours(e.target.value)}
-                                label="Total Hours">
+                            <Select value={totalHours} onChange={(e) => presenter.handleTotalHoursChange(e.target.value)} label="Total Hours" className="selector">
                                 {createDropdownOptions(50)}
                             </Select>
                         </FormControl>
                     </Grid>
                     <Grid item xs={6}>
-                        <FormControl fullWidth margin="normal"
-                            size="small">
+                        <FormControl fullWidth margin="normal" size="small">
                             <InputLabel>Total Minutes</InputLabel>
-                            <Select value={totalMinutes}
-                                onChange={(e) => setTotalMinutes(e.target.value)}
-                                label="Total Minutes">
+                            <Select value={totalMinutes} onChange={(e) => presenter.handleTotalMinutesChange(e.target.value)} label="Total Minutes" className="selector">
                                 {createDropdownOptions(59)}
                             </Select>
                         </FormControl>
@@ -57,47 +82,27 @@ const AudiobookCalculator = () => {
 
                 <Grid container spacing={2}>
                     <Grid item xs={6}>
-                        <FormControl fullWidth margin="normal"
-                            size="small">
+                        <FormControl fullWidth margin="normal" size="small">
                             <InputLabel>Hours Listened</InputLabel>
-                            <Select value={hoursListened}
-                                onChange={(e) => setHoursListened(e.target.value)}
-                                label="Hours Listened">
+                            <Select value={hoursListened} onChange={(e) => presenter.handleHoursListenedChange(e.target.value)} label="Hours Listened" className="selector">
                                 {createDropdownOptions(50)}
                             </Select>
                         </FormControl>
                     </Grid>
                     <Grid item xs={6}>
-                        <FormControl fullWidth margin="normal"
-                            size="small">
+                        <FormControl fullWidth margin="normal" size="small">
                             <InputLabel>Minutes Listened</InputLabel>
-                            <Select value={minutesListened}
-                                onChange={(e) => setMinutesListened(e.target.value)}
-                                label="Minutes Listened">
+                            <Select value={minutesListened} onChange={(e) => presenter.handleMinutesListenedChange(e.target.value)} label="Minutes Listened" className="selector">
                                 {createDropdownOptions(59)}
                             </Select>
                         </FormControl>
                     </Grid>
                 </Grid>
 
-                <FormControl fullWidth margin="normal"
-                    className="speed-select"
-                    size="small">
+                <FormControl fullWidth margin="normal" size="small">
                     <InputLabel>Listening Speed</InputLabel>
-                    <Select value={listeningSpeed}
-                        onChange={(e) => setListeningSpeed(e.target.value)}
-                        label="Listening Speed">
-                        <MenuItem value={1}>1.0x (Normal Speed)</MenuItem>
-                        <MenuItem value={1.1}>1.1x</MenuItem>
-                        <MenuItem value={1.2}>1.2x</MenuItem>
-                        <MenuItem value={1.3}>1.3x</MenuItem>
-                        <MenuItem value={1.4}>1.4x</MenuItem>
-                        <MenuItem value={1.5}>1.5x</MenuItem>
-                        <MenuItem value={1.6}>1.6x</MenuItem>
-                        <MenuItem value={1.7}>1.7x</MenuItem>
-                        <MenuItem value={1.8}>1.8x</MenuItem>
-                        <MenuItem value={1.9}>1.9x</MenuItem>
-                        <MenuItem value={2}>2.0x (Double Speed)</MenuItem>
+                    <Select value={listeningSpeed} onChange={(e) => presenter.handleListeningSpeedChange(e.target.value)} label="Listening Speed" className="selector">
+                        {createListeningSpeedOptions()}
                     </Select>
                 </FormControl>
 
@@ -107,11 +112,6 @@ const AudiobookCalculator = () => {
                     fullWidth
                     onClick={() => presenter.calculatePercentage(totalHours, totalMinutes, hoursListened, minutesListened, listeningSpeed)}
                     className="button"
-                    style={{
-                        marginTop: '16px',
-                        backgroundColor: '#9a5e8e',
-                        color: '#fff',
-                      }}
                 >
                     Calculate Percentage
                 </Button>
