@@ -6,6 +6,24 @@ export class AudiobookPresenter {
     this.model = new AudiobookModel();
   }
 
+  validateInputs(totalHours, totalMinutes, hoursListened, minutesListened) {
+    const totalTotalMinutes = Number(totalHours) * 60 + Number(totalMinutes);
+    const listenedTotalMinutes = Number(hoursListened) * 60 + Number(minutesListened);
+
+    console.log("Total total minutes:", totalTotalMinutes);
+    console.log("Listened total minutes:", listenedTotalMinutes);
+
+    if (totalTotalMinutes === 0) {
+      return 'Total time must be greater than zero.';
+    }
+
+    if (listenedTotalMinutes > totalTotalMinutes) {
+      return 'Listened time cannot exceed total time.';
+    }
+
+    return null;
+  }
+
   handleTotalHoursChange(value) {
     this.view.setTotalHours(value);
     this.storeData('totalHours', value);
@@ -45,6 +63,12 @@ export class AudiobookPresenter {
   }
 
   calculatePercentage(totalHours, totalMinutes, hoursListened, minutesListened, listeningSpeed) {
+    const error = this.validateInputs(totalHours, totalMinutes, hoursListened, minutesListened);
+    if (error) {
+      this.view.displayError(error);
+      return;
+    }
+
     const result = this.model.calculatePercentage(totalHours, totalMinutes, hoursListened, minutesListened, listeningSpeed);
     this.view.displayResult(result);
   }

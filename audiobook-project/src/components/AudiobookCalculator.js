@@ -8,11 +8,19 @@ const AudiobookCalculator = () => {
     const [totalMinutes, setTotalMinutes] = useState('');
     const [hoursListened, setHoursListened] = useState('');
     const [minutesListened, setMinutesListened] = useState('');
-    const [listeningSpeed, setListeningSpeed] = useState('');
+    const [listeningSpeed, setListeningSpeed] = useState(1);
     const [result, setResult] = useState(null);
+    const [error, setError] = useState('');
 
     const presenter = new AudiobookPresenter({
-        displayResult: (result) => setResult(result),
+        displayResult: (result) => {
+            setResult(result);
+            setError(''); // Clear error when result is successfully calculated
+        },
+        displayError: (error) => {
+            setError(error);
+            setResult(null); // Clear result when there is an error
+        },
         setTotalHours,
         setTotalMinutes,
         setHoursListened,
@@ -115,6 +123,12 @@ const AudiobookCalculator = () => {
                 >
                     Calculate Percentage
                 </Button>
+
+                {error && (
+                    <Typography variant="h6" className="error">
+                        {error}
+                    </Typography>
+                )}
 
                 {result !== null && (
                     <Typography variant="h6" className="result">

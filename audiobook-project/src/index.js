@@ -5,7 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { CssBaseline } from '@mui/material'; 
 import GlobalCssPriority from './GlobalCssPriority';
-import { app, analytics } from './firebaseConfig'; // Import Firebase configuration
+import { app, analytics } from './firebaseConfig';
 
 const rootElement = document.getElementById('root');
 const root = ReactDOM.createRoot(rootElement);

@@ -47,7 +47,13 @@ body {
   .result {
     font-weight: bold;
     margin-top: 20px;
-    color: #9a5e8e;
+    color: #79496f;
+  }
+
+  .error {
+    font-weight: bold;
+    margin-top: 20px;
+    color: #79496f;
   }
   
   h2 {
